@@ -27,6 +27,32 @@ def github_webhook(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     Request.objects.create(body=body)
+    if body['action'] == 'opened':
+        print('issue created')
+
+    if body['action'] == 'edited':
+        if not body.get('comment'):
+            print('issue edited')
+
+        else
+            print('comment edited')
+
+    if body['action'] == 'created':
+        print('comment created')
+
+    if body['action'] == 'deleted':
+        if not body.get('comment'):
+            print('issue deleted')
+
+        else
+            print('comment deleted')
+
+    if body['action'] == 'assigned':
+        print('user assigned')
+
+    if body['action'] == 'unassigned':
+        print('user unassigned')
+
     return HttpResponse('pong')
 
 

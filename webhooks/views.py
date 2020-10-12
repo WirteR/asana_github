@@ -44,7 +44,7 @@ def github_webhook(request):
     try:
         task_obj = Task.objects.filter(github_id=task_github_id)
     except:
-        pass
+        Task.objects.create(**task_data)
     print(task_obj)
 
     if comment:
@@ -58,7 +58,7 @@ def github_webhook(request):
         try:
             comment_obj = Comment.objects.filter(github_id=comment_github_id)
         except:
-            pass
+            Comment.objects.create(**comment_data)
         print(comment_obj)
 
     if body['action'] == 'opened':

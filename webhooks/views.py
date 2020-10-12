@@ -34,7 +34,7 @@ def github_webhook(request):
         if not body.get('comment'):
             print('issue edited')
 
-        else
+        else:
             print('comment edited')
 
     if body['action'] == 'created':
@@ -44,7 +44,7 @@ def github_webhook(request):
         if not body.get('comment'):
             print('issue deleted')
 
-        else
+        else:
             print('comment deleted')
 
     if body['action'] == 'assigned':

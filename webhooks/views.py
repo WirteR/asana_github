@@ -41,7 +41,11 @@ def github_webhook(request):
         'assignee': issue['user']['login'],
         'github_id': task_github_id
     }
-    task_obj = Task.objects.filter(github_id=task_github_id)
+    try:
+        task_obj = Task.objects.filter(github_id=task_github_id)
+    except:
+        pass
+    print(task_obj)
 
     if comment:
         comment_github_id = comment['id']
@@ -51,7 +55,11 @@ def github_webhook(request):
             'author': comment['user']['login'],
             'github_id': comment['id']
         }
-        comment_obj = Comment.objects.filter(github_id=comment_github_id)
+        try:
+            comment_obj = Comment.objects.filter(github_id=comment_github_id)
+        except:
+            pass
+        print(comment_obj)
 
     if body['action'] == 'opened':
         Task.objects.create(**task_data)

@@ -78,7 +78,7 @@ def github_webhook(request):
         task_obj.update(assignee='')
 
     if body['action'] == 'closed':
-        task_obj.update(status='DN')
+        task_obj.update(status='DN', 'is_closed'=True)
 
     if body['action'] == 'deleted':
         if not body.get('comment'):

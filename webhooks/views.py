@@ -27,6 +27,7 @@ def github_webhook(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     Request.objects.create(body=body)
+    print(body['action'])
     if body['action'] == 'opened':
         print('issue created')
 

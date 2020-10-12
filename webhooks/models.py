@@ -19,7 +19,7 @@ class Task(models.Model):
     asana_id = models.IntegerField(null=True, default=None)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Comment(models.Model):
@@ -28,6 +28,9 @@ class Comment(models.Model):
     github_id = models.IntegerField(null=True, default=None)
     asana_id = models.IntegerField(null=True, default=None)
     author = models.CharField(max_length=125, blank=True, default='')
+
+    def __str__(self):
+        return self.body
 
 
 class Request(models.Model):

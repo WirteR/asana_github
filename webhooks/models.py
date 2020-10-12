@@ -23,3 +23,7 @@ class Task(models.Model):
 class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE) 
     text = models.TextField()
+
+
+class Request(models.Model):
+    body = models.TextField()

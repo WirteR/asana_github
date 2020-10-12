@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 import json
 
+from .models import *
+
 # Create your views here.
 
 class Settings(View):
@@ -24,7 +26,7 @@ class DashBoard(View):
 def github_webhook(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    print(body)
+    Request.objects.create(body=body)
     return HttpResponse('pong')
 
 

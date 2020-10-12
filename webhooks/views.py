@@ -45,7 +45,6 @@ def github_webhook(request):
         task_obj = Task.objects.filter(github_id=task_github_id)
     except:
         Task.objects.create(**task_data)
-    print(task_obj)
 
     if comment:
         comment_github_id = comment['id']
@@ -59,7 +58,6 @@ def github_webhook(request):
             comment_obj = Comment.objects.filter(github_id=comment_github_id)
         except:
             Comment.objects.create(**comment_data)
-        print(comment_obj)
 
     if body['action'] == 'opened':
         Task.objects.create(**task_data)
@@ -70,22 +68,23 @@ def github_webhook(request):
     if body['action'] == 'edited':
         if not body.get('comment'):
             task_obj.update(**task_data)
-
         else:
             comment_obj.update(**comment_data)
-
-    if body['action'] == 'deleted':
-        if not body.get('comment'):
-            task_obj.delete()
-
-        else:
-            comment_obj.delete()
 
     if body['action'] == 'assigned':
         task_obj.update(assignee=issue['user']['login'])
 
     if body['action'] == 'unassigned':
         task_obj.update(assignee='')
+
+    if body['action'] == 'closed':
+        task_obj.update(status='DN')
+
+    if body['action'] == 'deleted':
+        if not body.get('comment'):
+            task_obj.delete()
+        else:
+            comment_obj.delete()
 
     return HttpResponse('pong')
 

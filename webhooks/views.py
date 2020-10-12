@@ -24,35 +24,60 @@ class DashBoard(View):
 
 @csrf_exempt
 def github_webhook(request):
+    if not request.body:
+        return HttpResponse(200)
+
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     Request.objects.create(body=body)
-    print(body['action'])
+
+    issue = body['issue']
+    comment = body.get('comment')
+
+    task_github_id = issue['id']
+    task_data = {
+        'title': issue['title'],
+        'body': issue.get('body', ''),
+        'assignee': issue['user']['login'],
+        'github_id': task_github_id
+    }
+    task_obj = Task.objects.filter(github_id=task_github_id)
+
+    if comment:
+        comment_github_id = comment['id']
+        comment_data = {
+            'task': Task.objects.get(github_id=task_github_id),
+            'body': comment['body'],
+            'author': comment['user']['login'],
+            'github_id': comment['id']
+        }
+        comment_obj = Comment.objects.filter(github_id=comment_github_id)
+
     if body['action'] == 'opened':
-        print('issue created')
+        Task.objects.create(**task_data)
+
+    if body['action'] == 'created':
+        Comment.objects.create(**comment_data)
 
     if body['action'] == 'edited':
         if not body.get('comment'):
-            print('issue edited')
+            task_obj.update(**task_data)
 
         else:
-            print('comment edited')
-
-    if body['action'] == 'created':
-        print('comment created')
+            comment_obj.update(**comment_data)
 
     if body['action'] == 'deleted':
         if not body.get('comment'):
-            print('issue deleted')
+            task_obj.delete()
 
         else:
-            print('comment deleted')
+            comment_obj.delete()
 
     if body['action'] == 'assigned':
-        print('user assigned')
+        task_obj.update(assignee=issue['user']['login'])
 
     if body['action'] == 'unassigned':
-        print('user unassigned')
+        task_obj.update(assignee='')
 
     return HttpResponse('pong')
 

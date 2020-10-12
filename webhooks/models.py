@@ -10,11 +10,13 @@ STATUSES = [
 
 
 class Task(models.Model):
-    name = models.CharField(max_length=125)
-    description = models.TextField()
-    assignee = models.EmailField(max_length=255)
+    title = models.CharField(max_length=125)
+    body = models.TextField(blank=True, default='')
+    assignee = models.CharField(max_length=125, blank=True, default='')
     status = models.CharField(max_length=2, choices=STATUSES, default='TD')
     is_closed = models.BooleanField(default=False)
+    github_id = models.IntegerField(null=True, default=None)
+    asana_id = models.IntegerField(null=True, default=None)
 
     def __str__(self):
         return self.name
@@ -22,7 +24,10 @@ class Task(models.Model):
 
 class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE) 
-    text = models.TextField()
+    body = models.TextField()
+    github_id = models.IntegerField(null=True, default=None)
+    asana_id = models.IntegerField(null=True, default=None)
+    author = models.CharField(max_length=125, blank=True, default='')
 
 
 class Request(models.Model):

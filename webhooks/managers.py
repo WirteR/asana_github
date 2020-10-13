@@ -52,7 +52,7 @@ class AsanaTaskManager(AsanaManager):
     def unassign(self):
         self.client.tasks.update_task(
             str(Task.objects.get(github_id=self.github_id).asana_id),
-            {'assignee': "None"})
+            {'assignee': ""})
 
     def close(self):
         self.client.tasks.update_task(

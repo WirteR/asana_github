@@ -129,6 +129,6 @@ def asana_webhook(request):
     response = HttpResponse(content_type='application/json',)
     print(request.META)
     pdb.set_trace()
-    response['X-Hook-Secret'] = request.POST['X-Hook-Secret']
+    response['X-Hook-Secret'] = request.META["HTTP_X_HOOK_SECRET"]
     response.status_code = 200
     return response

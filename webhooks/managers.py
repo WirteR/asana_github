@@ -24,6 +24,7 @@ class AsanaManager:
 
 class AsanaTaskManager(AsanaManager):
     def create(self):
+        
         response = self.client.tasks.create_task({
             'workspace': '1197770606849983',
             'name': self.title,
@@ -33,9 +34,11 @@ class AsanaTaskManager(AsanaManager):
             ]
         })
         self.gid = response.get('gid')
+        print('create task', self.gid)
         self.task_obj.update(asana_id=self.gid)
 
     def update(self):
+        print('update task', self.gid)
         self.client.tasks.update_task(
             str(self.gid),
             {
@@ -45,6 +48,7 @@ class AsanaTaskManager(AsanaManager):
         )
 
     def delete(self):
+        print('delete task', self.gid)
         self.client.tasks.delete_task(self.gid)
 
 
@@ -56,9 +60,11 @@ class AsanaCommentManager(AsanaManager):
             }
         )
         self.gid = result['gid']
+        print('create comment', self.gid)
         Comment.objects.filter(github_id=self.github_id).update(asana_id=self.gid)
 
     def update(self):
+        print('update comment', self.gid)
         self.client.stories.update_story(
                 str(self.gid),
                 {
@@ -67,4 +73,5 @@ class AsanaCommentManager(AsanaManager):
             )
 
     def delete(self):
+        print('delete comment', self.gid)
         self.client.stories.delete_story(self.gid)

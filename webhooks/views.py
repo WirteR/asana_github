@@ -60,7 +60,7 @@ def github_webhook(request):
     }
     
     asana_task = AsanaTaskManager(type="task", **task_data)
-    
+
     task_obj = Task.objects.filter(github_id=task_github_id)
     if not task_obj and body['action'] != 'opened':
         Task.objects.create(**task_data)
@@ -95,8 +95,10 @@ def github_webhook(request):
     if body['action'] == 'edited':
         if not body.get('comment'):
             task_obj.update(**task_data)
+            asana_task.update()
         else:
             comment_obj.update(**comment_data)
+            asana_comment.update()
 
     if body['action'] == 'assigned':
         task_obj.update(assignee=issue['user']['login'])

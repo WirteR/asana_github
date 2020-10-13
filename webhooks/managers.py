@@ -33,6 +33,16 @@ class AsanaTaskManager(AsanaManager):
         })
         self.task_obj.update(asana_id=response.get('gid'))
 
+    def update(self):
+        self.client.tasks.update_task(
+            self.task_obj.asana_id, 
+            {
+                'name': self.title,
+                'notes': self.body,
+            }
+        )
+
+
 class AsanaCommentManager(AsanaManager):
     def create(self):
         result = self.client.stories.create_story_for_task(
@@ -41,3 +51,9 @@ class AsanaCommentManager(AsanaManager):
             }
         )
         Comment.objects.filter(github_id=self.github_id).update(asana_id=result['gid'])
+
+    def update(self):
+        self.client.stories.update_story(
+                str(self.task_obj.asana_id),{
+                "text":self.body
+            })

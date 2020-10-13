@@ -1,6 +1,8 @@
 from .models import Task, Comment
 import asana
 import json
+import os
+
 
 class AsanaManager:
     def __init__(self, *args, **kwargs):
@@ -130,29 +132,37 @@ class AsanaOutputManager:
         self.code = code
         self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
 
-    def get_unique(self, data):
+    def transform_data(self, data):
         response = []
+        gid_group = {}
         for x in data:
-            if len(response) == 0:
-                response.append(x)
-            if response.count(x) == 0:
-                response.append(x)
-        return response
+            if not recource_gid_group.get(x['resource']['gid']):
+                gid_group[x['resource']['gid']] = {
+                    'author': self.client.users.get_user(x['user']['gid']).get('name'),
+                    'type:' x['resource']['resource_type'],
+                    'action': x['action'],
+                    'asana_id': x['resource']['gid'],
+                }
+                temp = {}
+                if x['resource']['resource_type'] == 'task':
+                    obj = self.client.tasks.get_task(x['resource']['gid'])
+                    temp['assignee'] = self.client.users.get_user(obj.get('assignee')).get('name')
+                    temp['body'] = obj.get('notes')
+                    temp['title'] = obj.get('name')
+
+                if x['resource']['resource_type'] == 'story':
+                    obj = self.client.stories.get_story(x['resource']['gid'])
+                    temp['body'] = obj.get("text")
+            
+            if x['parent']['resource_type'] == 'section':
+                gid_group[x['resource']['gid']]['status'] = self.client.sections.get_section(x['parent']['gid'])
+                
+        return gid_group.values()
+
 
     def retrieve_main_data(self):
-        added = []
-        changed = []
-        deleted = []
-        for x in self.code:
-            if x['action'] == 'added':
-                added.append(x)
-            if x['action'] == 'changed':
-                changed.append(x)
-            if x['action'] == 'deleted':
-                deleted.append(x)
+        transformed_data = self.transform_data(self.code)
+        print(transformed_data)
 
-        added, changed, deleted = (self.get_unique(added), self.get_unique(changed), 
-                                    self.get_unique(deleted))
-        print(len(added), len(changed), len(deleted))    
     
 

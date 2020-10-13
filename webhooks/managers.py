@@ -17,7 +17,7 @@ class AsanaManager():
             self.task_id = kwargs.get('assignee').github_id
 
     def create_task(self):
-        self.client.create_task({
+        self.client.tasks.create_task({
             'workspace': '1197769418678393',
             'name': self.title,
             'notes': self.body

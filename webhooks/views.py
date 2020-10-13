@@ -59,6 +59,8 @@ def github_webhook(request):
         'github_id': task_github_id
     }
     
+    asana_task = AsanaTaskManager(type="task", **task_data)
+    
     task_obj = Task.objects.filter(github_id=task_github_id)
     if not task_obj and body['action'] != 'opened':
         Task.objects.create(**task_data)
@@ -81,7 +83,7 @@ def github_webhook(request):
         if not comment_obj:
             Comment.objects.create(**comment_data)
         
-    asana_task = AsanaTaskManager(type="task", **task_data)
+    
 
     
 

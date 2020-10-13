@@ -34,17 +34,17 @@ class AsanaTaskManager(AsanaManager):
         self.gid = response.get('gid')
         self.task_obj.update(asana_id=self.gid)
 
-    def update(self):
-        self.client.tasks.update_task(
-            str(self.gid),
-            {
-                'name': self.title,
-                'notes': self.body,
-            }
-        )
+    # def update(self):
+    #     self.client.tasks.update_task(
+    #         str(self.gid),
+    #         {
+    #             'name': self.title,
+    #             'notes': self.body,
+    #         }
+    #     )
 
-    def delete(self):
-        self.client.tasks.delete_task(self.gid)
+    # def delete(self):
+    #     self.client.tasks.delete_task(self.gid)
 
 
 class AsanaCommentManager(AsanaManager):
@@ -57,13 +57,13 @@ class AsanaCommentManager(AsanaManager):
         self.gid = result['gid']
         Comment.objects.filter(github_id=self.github_id).update(asana_id=self.gid)
 
-    def update(self):
-        self.client.stories.update_story(
-                str(self.gid),
-                {
-                    "text": self.body
-                }
-            )
+    # def update(self):
+    #     self.client.stories.update_story(
+    #             str(self.gid),
+    #             {
+    #                 "text": self.body
+    #             }
+    #         )
 
-    def delete(self):
-        self.client.stories.delete_story(self.gid)
+    # def delete(self):
+    #     self.client.stories.delete_story(self.gid)

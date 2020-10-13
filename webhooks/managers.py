@@ -32,7 +32,7 @@ class AsanaTaskManager(AsanaManager):
         sections = self.client.sections.get_sections_for_project('1198205950303413')
         for x in sections:
             if x['name'] == section_name:
-                return x
+                return x['gid']
 
     def create(self):
         response = self.client.tasks.create_task({
@@ -73,15 +73,13 @@ class AsanaTaskManager(AsanaManager):
 
     def close(self):
         obj = Task.objects.get(github_id=self.github_id)
-        section = self.get_sections(obj.status)
+        section_gid = self.get_sections(obj.status)
         print(section)
         self.client.tasks.update_task(
             str(obj.asana_id),
             {
                 'completed': True,
-                'memberships': [
-                    'section': section
-                ]
+                'section': f'{section_gid}'
             }
         )
         

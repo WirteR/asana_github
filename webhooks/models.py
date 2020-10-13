@@ -13,7 +13,7 @@ class Task(models.Model):
     title = models.CharField(max_length=125)
     body = models.TextField(blank=True, default='')
     assignee = models.CharField(max_length=125, blank=True, default='')
-    author = models.CharField(max_length=125)
+    author = models.CharField(max_length=125, default="")
     status = models.CharField(max_length=2, choices=STATUSES, default='TD')
     is_closed = models.BooleanField(default=False)
     github_id = models.IntegerField(null=True, default=None)

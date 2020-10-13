@@ -33,4 +33,5 @@ class AsanaTaskManager(AsanaManager):
 
 class AsanaCommentManager(AsanaManager):
     def create(self):
+        print(self.task_obj.asana_id)
         print(self.client.tasks.get_task(self.task_obj.asana_id))

@@ -20,11 +20,14 @@ class Settings(View):
 
 class DashBoard(View):
     def get(self, request):
-        pass
-    #     client = asana.Client.access_token('1/1197770606849972:10e1226268b729592d41e6579a84c9ac')
-    #     client.headers["Asana-Enable"] = "string_ids"
-    #     result = client.webhooks.create({"target":'https://github-asana-sync.herokuapp.com/asana-webhook', "resource":"1197769418678393"})
-    #     print(result)
+        client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
+        client.headers["Asana-Enable"] = "string_ids"
+        result = client.webhooks.create({
+            "target":'https://github-asana-sync.herokuapp.com/asana-webhook', 
+            "resource":"1197769418678393"
+        })
+        print(result)
+    
 
     # def post(self, request):
     #     secret = request['headers']['X-Hook-Secret']
@@ -120,14 +123,10 @@ def github_webhook(request):
 
 
 @csrf_exempt
-@require_POST
 def asana_webhook(request):
-    print('here')
-    secret = request['headers']['X-Hook-Secret']
-    return {"statusCode":"200",
-        "headers": {
-             'Content-Type': 'application/json',
-             'Accept': 'application/json',
-             'X-Hook-Secret': secret
-        }
-    }
+    response = HttpResponse(
+        status_code=200, 
+        content_type=application/json,
+        )
+    response['X-Hook-Secret'] = request['headers']['X-Hook-Secret']
+    return response

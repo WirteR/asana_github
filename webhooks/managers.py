@@ -120,4 +120,6 @@ class AsanaCommentManager(AsanaManager):
 
 class GitGubManager:
     def __init__(self, *args, **kwargs):
-        pass
+        self.auth = ('WirteR', 'PesVasil10-')
+
+    

@@ -36,12 +36,12 @@ class AsanaTaskManager(AsanaManager):
 class AsanaCommentManager(AsanaManager):
     def create(self):
         result = self.client.stories.create_story_for_task(
-            str(self.task_obj.asana_id),
+            str(self.task_obj.asana_id),{
             "data": {
                 "created_by": {
                     "name": self.author,
                 }
                 "text":self.body
-            }
+            }}
         )
         print(result)

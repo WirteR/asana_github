@@ -31,6 +31,12 @@ class AsanaTaskManager(AsanaManager):
     def get_sections(self, section_name):
         print(section_name)
         sections = self.client.sections.get_sections_for_project('1197769418678393')
+        if section_name == 'TD':
+            section_name = 'To do':
+        elif section_name == 'DO':
+            section_name = 'Doing'
+        else:
+            section_name = 'Done'
         for x in sections:
             print(x)
             if x['name'] == section_name:

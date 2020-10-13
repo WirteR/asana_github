@@ -139,7 +139,7 @@ class AsanaOutputManager:
             if not recource_gid_group.get(x['resource']['gid']):
                 gid_group[x['resource']['gid']] = {
                     'author': self.client.users.get_user(x['user']['gid']).get('name'),
-                    'type:' x['resource']['resource_type'],
+                    'type': x['resource']['resource_type'],
                     'action': x['action'],
                     'asana_id': x['resource']['gid'],
                 }

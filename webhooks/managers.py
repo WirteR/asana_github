@@ -18,7 +18,7 @@ class AsanaManager():
 
     def create_task(self):
         print(self.title, self.body)
-        res = self.client.tasks.create_task({
+        response = self.client.tasks.create_task({
             'workspace': '1197770606849983',
             'name': str(self.title),
             'notes': str(self.body),
@@ -26,5 +26,5 @@ class AsanaManager():
                 '1197769418678393'
             ]
         })
-        print(res)
+        Task.objects.filter(github_id=self.github_id).update(asana_id=response.get('gid'))
     

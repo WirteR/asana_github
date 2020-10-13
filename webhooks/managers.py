@@ -47,7 +47,7 @@ class AsanaTaskManager(AsanaManager):
         self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id).asana_id))
 
     def assign(self):
-        for i in self.client.users.get_users_for_workspace('1197769418678393'):
+        for i in self.client.users.get_users_for_workspace('1197770606849983'):
             print(i)
 
     def unassign(self):

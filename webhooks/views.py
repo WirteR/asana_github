@@ -58,14 +58,14 @@ def github_webhook(request):
         'assignee': issue['assignee']['login'] if issue['assignee'] else '',
         'github_id': task_github_id
     }
-    try:
-        task_obj = Task.objects.filter(github_id=task_github_id)
+    
+    task_obj = Task.objects.filter(github_id=task_github_id)
         if not task_obj:
-            Task.objects.create(**task_data)
-            print('here')
-    except:
         Task.objects.create(**task_data)
         print('here')
+    
+    Task.objects.create(**task_data)
+    print('here')
 
     if comment:
         comment_github_id = comment['id']

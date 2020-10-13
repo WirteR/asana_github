@@ -136,7 +136,7 @@ class AsanaOutputManager:
         response = []
         gid_group = {}
         for x in data:
-            if not recource_gid_group.get(x['resource']['gid']):
+            if not gid_group.get(x['resource']['gid']):
                 gid_group[x['resource']['gid']] = {
                     'author': self.client.users.get_user(x['user']['gid']).get('name'),
                     'type': x['resource']['resource_type'],

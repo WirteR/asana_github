@@ -63,7 +63,7 @@ def github_webhook(request):
         if not task_obj:
             print('here')
             print(task_data)
-            Task.objects.create(**task_data)
+            print(Task.objects.create(**task_data))
     except:
         Task.objects.create(**task_data)
 

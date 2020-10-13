@@ -54,7 +54,8 @@ def github_webhook(request):
     task_data = {
         'title': issue['title'],
         'body': issue.get('body', ''),
-        'assignee': issue['user']['login'],
+        'author': issue['user']['login'],
+        'assignee': issue['assignee']['login'],
         'github_id': task_github_id
     }
     try:
@@ -84,6 +85,7 @@ def github_webhook(request):
 
     if body['action'] == 'opened':
         Task.objects.create(**task_data)
+        asana_task.create_task()
 
     if body['action'] == 'created':
         Comment.objects.create(**comment_data)

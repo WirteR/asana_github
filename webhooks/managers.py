@@ -79,6 +79,7 @@ class AsanaTaskManager(AsanaManager):
             str(obj.asana_id),
             {
                 'completed': True,
+                'project': '1197769418678393',
                 'section': f'{section_gid}'
             }
         )

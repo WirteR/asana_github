@@ -8,6 +8,7 @@ class AsanaManager:
         self.author = kwargs.get('author')
         self.body = kwargs.get('body')
         self.github_id = kwargs.get('github_id')
+        self.task_obj = Task.objects.filter(github_id=self.github_id)
         
         if self.resource == 'task':
             self.assignee = kwargs.get('assignee')
@@ -18,7 +19,7 @@ class AsanaManager:
     
 
 class AsanaTaskManager(AsanaManager):
-    def create_task(self):
+    def create(self):
         response = self.client.tasks.create_task({
             'workspace': '1197770606849983',
             'name': str(self.title),
@@ -27,8 +28,8 @@ class AsanaTaskManager(AsanaManager):
                 '1197769418678393'
             ]
         })
-        Task.objects.filter(github_id=self.github_id).update(asana_id=response.get('gid'))
-
+        self.task_obj.update(asana_id=response.get('gid'))
 
 class AsanaCommentManager(AsanaManager):
-    pass
+    def create(self):
+        print(self.client.tasks.get_task(task_obj.asana_id))

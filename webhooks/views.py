@@ -85,10 +85,12 @@ def github_webhook(request):
 
     if body['action'] == 'opened':
         Task.objects.create(**task_data)
-        asana_task.create_task()
+        asana_task.create()
 
     if body['action'] == 'created':
         Comment.objects.create(**comment_data)
+        asana_comment.create()
+
 
     if body['action'] == 'edited':
         if not body.get('comment'):

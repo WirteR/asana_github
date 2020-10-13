@@ -101,10 +101,11 @@ def github_webhook(request):
 
     if body['action'] == 'unassigned':
         task_obj.update(assignee='')
+        asana_task.unassign()
 
     if body['action'] == 'closed':
         task_obj.update(status='DN', is_closed=True)
-
+        asana_task.close()
     #done
     if body['action'] == 'deleted':
         if not body.get('comment'):

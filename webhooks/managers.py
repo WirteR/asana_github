@@ -50,10 +50,17 @@ class AsanaTaskManager(AsanaManager):
         print(self.client.users.get_users())
 
     def unassign(self):
-        pass
+        self.client.tasks.update_task(
+            str(Task.objects.get(github_id=self.github_id).asana_id),
+            {'assignee': "None"})
 
     def close(self):
-        pass
+        self.client.tasks.update_task(
+            str(Task.objects.get(github_id=self.github_id).asana_id),
+            {
+                'completed': True,
+            }
+        )
 
 class AsanaCommentManager(AsanaManager):
     def create(self):

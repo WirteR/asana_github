@@ -85,7 +85,9 @@ class AsanaTaskManager(AsanaManager):
             str(obj.asana_id),
             {
                     'completed': True,
-                    "projects":"1197769418678393",
+                    'projects': [
+                        '1197769418678393'
+                    ]
                     "memberships":[{
                         "project": "1197769418678393",
                         "section": '{}'.format(section_gid)

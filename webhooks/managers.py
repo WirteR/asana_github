@@ -129,24 +129,27 @@ class AsanaOutputManager:
         self.code = code
         self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
 
+    def get_unique(data):
+        response = []
+        for x in data:
+            if len(response) == 0:
+                response.append(x)
+            if response.count(x) == 0:
+                response.append(x)
+
     def retrieve_main_data(self):
         added = []
         changed = []
         deleted = []
         for x in self.code:
             if x['action'] == 'added':
-                print('added', x)
                 added.append(x)
             if x['action'] == 'changed':
-                print('changed', x)
                 changed.append(x)
             if x['action'] == 'deleted':
-                print('deleted', x)
                 deleted.append(x)
 
-        added, changed, deleted = set(added), set(changed), set(deleted)
-        print('\n', added)
-        print('\n', changed)
-        print('\n', deleted)
+        added, changed, deleted = get_unique(added), get_unique(changed), get_unique(deleted)
+        print(len(added), len(changed), len(deleted))    
     
 

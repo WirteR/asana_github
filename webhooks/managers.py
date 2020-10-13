@@ -71,6 +71,9 @@ class AsanaTaskManager(AsanaManager):
                 'completed': True,
             }
         )
+        print(self.client.tasks.get_task('1197769418678405'))
+        print(self.client.tasks.get_task('1198206437723499'))
+        print(self.client.tasks.get_task('1198206043419680'))
 
 
 class AsanaCommentManager(AsanaManager):

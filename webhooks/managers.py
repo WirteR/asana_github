@@ -18,7 +18,7 @@ class AsanaManager():
 
     def create_task(self):
         self.client.tasks.create_task({
-            'workspace': '1197770606849983',
+            'workspace': 1197770606849983,
             'name': self.title,
             'notes': self.body
         })

@@ -53,7 +53,7 @@ def github_webhook(request):
     task_github_id = issue['id']
     task_data = {
         'title': issue['title'],
-        'body': issue.get('body', ''),
+        'body': issue.get('body'),
         'author': issue['user']['login'],
         'assignee': issue['assignee']['login'] if issue['assignee'] else '',
         'github_id': task_github_id

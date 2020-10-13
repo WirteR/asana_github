@@ -74,7 +74,7 @@ class AsanaTaskManager(AsanaManager):
     def close(self):
         obj = Task.objects.get(github_id=self.github_id)
         section_gid = self.get_sections(obj.status)
-        print(section)
+        print(section_gid)
         self.client.tasks.update_task(
             str(obj.asana_id),
             {

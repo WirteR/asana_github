@@ -31,6 +31,7 @@ class AsanaTaskManager(AsanaManager):
     def get_sections(self, section_name):
         sections = self.client.sections.get_sections_for_project('1197769418678393')
         for x in sections:
+            print(x)
             if x['name'] == section_name:
                 return x['gid']
 

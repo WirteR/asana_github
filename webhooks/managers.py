@@ -3,6 +3,7 @@ import asana
 
 class AsanaManager:
     def __init__(self, *args, **kwargs):
+    
         self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
         self.resource = kwargs.get('type')
         self.author = kwargs.get('author')
@@ -22,8 +23,8 @@ class AsanaTaskManager(AsanaManager):
     def create(self):
         response = self.client.tasks.create_task({
             'workspace': '1197770606849983',
-            'name': str(self.title),
-            'notes': str(self.body),
+            'name': self.title,
+            'notes': self.body,
             'projects': [
                 '1197769418678393'
             ]

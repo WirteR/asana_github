@@ -61,6 +61,8 @@ def github_webhook(request):
     try:
         task_obj = Task.objects.filter(github_id=task_github_id)
         if not task_obj:
+            print('here')
+            print(task_data)
             Task.objects.create(**task_data)
     except:
         Task.objects.create(**task_data)

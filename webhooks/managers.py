@@ -9,9 +9,6 @@ class AsanaManager:
         self.author = kwargs.get('author')
         self.body = kwargs.get('body')
         self.github_id = kwargs.get('github_id')
-        self.users = []
-        for i in self.client.users.get_users_for_workspace('1197770606849983'):
-            self.users.append(i)
         
         if self.resource == 'task':
             self.assignee = kwargs.get('assignee')
@@ -25,6 +22,18 @@ class AsanaManager:
     
 
 class AsanaTaskManager(AsanaManager):
+    def get_user_gid(self):
+        users = self.client.users.get_users_for_workspace('1197770606849983')
+        for x in users:
+            if x['name'] == self.assignee:
+                return x['gid']
+
+    def get_sections(self, section_name):
+        sections = self.client.sections.get_sections_for_project('1198205950303413')
+        for x in sections:
+            if x['name'] == section_name:
+                return x
+
     def create(self):
         response = self.client.tasks.create_task({
             'workspace': '1197770606849983',
@@ -49,9 +58,7 @@ class AsanaTaskManager(AsanaManager):
         self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id).asana_id))
 
     def assign(self):
-        for x in self.users:
-            if x['name'] == self.assignee:
-                user_gid = x['gid']
+        user_gid = self.get_user_gid()
         self.client.tasks.update_task(
             str(Task.objects.get(github_id=self.github_id).asana_id),
             {
@@ -65,15 +72,18 @@ class AsanaTaskManager(AsanaManager):
             {'assignee': None})
 
     def close(self):
+        obj = Task.objects.get(github_id=self.github_id)
+        section = self.get_sections(obj.status)
         self.client.tasks.update_task(
-            str(Task.objects.get(github_id=self.github_id).asana_id),
+            str(obj.asana_id),
             {
                 'completed': True,
+                'memberships': [
+                    'section': section
+                ]
             }
         )
-        print(self.client.tasks.get_task('1197769418678405'))
-        print(self.client.tasks.get_task('1198206437723499'))
-        print(self.client.tasks.get_task('1198206043419680'))
+        
 
 
 class AsanaCommentManager(AsanaManager):

@@ -40,4 +40,4 @@ class AsanaCommentManager(AsanaManager):
                 "text":self.body
             }
         )
-        print(result)
+        Comment.objects.filter(github_id=self.github_id).update(asana_id=result['gid'])

@@ -4,6 +4,7 @@ import asana
 class AsanaManager():
     def __init__(self, *args, **kwargs):
         self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
+        print([k,v for k,v in **kwargs])
         self.resource = kwargs.get('type')
         self.author = kwargs.get('author')
         self.body = kwargs.get('body'),

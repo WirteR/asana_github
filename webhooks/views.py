@@ -83,10 +83,6 @@ def github_webhook(request):
         if not comment_obj:
             Comment.objects.create(**comment_data)
         
-    
-
-    
-
     if body['action'] == 'created':
         Comment.objects.create(**comment_data)
         asana_comment.create()

@@ -53,7 +53,10 @@ class AsanaCommentManager(AsanaManager):
         Comment.objects.filter(github_id=self.github_id).update(asana_id=result['gid'])
 
     def update(self):
+        gid = Comment.objects.get(github_id=self.github_id).asana_id
         self.client.stories.update_story(
-                str(self.task_obj.asana_id),{
-                "text":self.body
-            })
+                asana_id,
+                {
+                    "text": self.body
+                }
+            )

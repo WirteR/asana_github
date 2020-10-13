@@ -40,7 +40,7 @@ class AsanaCommentManager(AsanaManager):
             "data": {
                 "created_by": {
                     "name": self.author,
-                }
+                },
                 "text":self.body
             }}
         )

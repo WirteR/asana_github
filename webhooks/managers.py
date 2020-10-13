@@ -1,5 +1,5 @@
 class AsanaManager():
-    def __init__(self, resource, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.resource = kwargs.get('type')
         self.username = kwargs.get('assignee')
         self.title = kwargs.get('title')

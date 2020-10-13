@@ -73,7 +73,7 @@ def github_webhook(request):
             'author': comment['user']['login'],
             'github_id': comment['id']
         }
-        asana_comment = AsanaManager(type="comment", **comment_data)
+        asana_comment = AsanaCommentManager(type="comment", **comment_data)
         try:
             comment_obj = Comment.objects.filter(github_id=comment_github_id)
             if not comment_obj:
@@ -81,7 +81,7 @@ def github_webhook(request):
         except:
             Comment.objects.create(**comment_data)
         
-    asana_task = AsanaManager(type="task", **task_data)
+    asana_task = AsanaTaskManager(type="task", **task_data)
 
     if body['action'] == 'opened':
         Task.objects.create(**task_data)

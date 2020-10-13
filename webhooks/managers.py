@@ -29,7 +29,6 @@ class AsanaTaskManager(AsanaManager):
                 return x['gid']
 
     def get_sections(self, section_name):
-        print(section_name)
         sections = self.client.sections.get_sections_for_project('1197769418678393')
         if section_name == 'TD':
             section_name = 'To do'
@@ -38,7 +37,6 @@ class AsanaTaskManager(AsanaManager):
         else:
             section_name = 'Done'
         for x in sections:
-            print(x)
             if x['name'] == section_name:
                 return x['gid']
 
@@ -82,8 +80,7 @@ class AsanaTaskManager(AsanaManager):
     def close(self):
         obj = Task.objects.get(github_id=self.github_id)
         section_gid = self.get_sections(obj.status)
-        print(section_gid)
-        self.client.tasks.update_task(
+        response = self.client.tasks.update_task(
             str(obj.asana_id),
             {
                 'completed': True,
@@ -91,6 +88,7 @@ class AsanaTaskManager(AsanaManager):
                 'section': f'{section_gid}'
             }
         )
+        print(response)
         
 
 

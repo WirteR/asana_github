@@ -20,7 +20,7 @@ class Settings(View):
 
 class DashBoard(View):
     def get(self, request):
-        def pass
+        pass
     #     client = asana.Client.access_token('1/1197770606849972:10e1226268b729592d41e6579a84c9ac')
     #     client.headers["Asana-Enable"] = "string_ids"
     #     result = client.webhooks.create({"target":'https://github-asana-sync.herokuapp.com/asana-webhook', "resource":"1197769418678393"})

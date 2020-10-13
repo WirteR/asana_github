@@ -40,7 +40,7 @@ class AsanaTaskManager(AsanaManager):
             'name': self.title,
             'notes': self.body,
             'projects': [
-                '1197769418678393'
+                '1198205950303413'
             ]
         })
         self.task_obj.update(asana_id=response.get('gid'))
@@ -63,7 +63,7 @@ class AsanaTaskManager(AsanaManager):
             str(Task.objects.get(github_id=self.github_id).asana_id),
             {
                 'assignee': f"{user_gid}",
-                'workspace': '1197770606849983',
+                'workspace': '1198205950303413',
             })
 
     def unassign(self):
@@ -79,7 +79,7 @@ class AsanaTaskManager(AsanaManager):
             str(obj.asana_id),
             {
                 'completed': True,
-                'project': '1197769418678393',
+                'project': '1198205950303413',
                 'section': f'{section_gid}'
             }
         )

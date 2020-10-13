@@ -1,6 +1,5 @@
 from .models import Task, Comment
 import asana
-from github import Github
 
 class AsanaManager:
     def __init__(self, *args, **kwargs):
@@ -121,4 +120,4 @@ class AsanaCommentManager(AsanaManager):
 
 class GitGubManager:
     def __init__(self, *args, **kwargs):
-        self.client = Github("WirteR", "PesVasil10-")
+        pass

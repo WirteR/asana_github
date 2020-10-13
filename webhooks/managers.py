@@ -21,7 +21,10 @@ class AsanaManager():
         res = self.client.tasks.create_task({
             'workspace': '1197770606849983',
             'name': str(self.title),
-            'notes': str(self.body)
+            'notes': str(self.body),
+            'projects': [
+                '1197769418678393'
+            ]
         })
         print(res)
     

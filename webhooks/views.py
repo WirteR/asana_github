@@ -56,6 +56,7 @@ def github_webhook(request):
         'body': issue.get('body', ''),
         'assignee': issue['user']['login'],
         'github_id': task_github_id
+        'recource': 'task'
     }
     try:
         task_obj = Task.objects.filter(github_id=task_github_id)
@@ -68,14 +69,14 @@ def github_webhook(request):
             'task': Task.objects.get(github_id=task_github_id),
             'body': comment['body'],
             'author': comment['user']['login'],
-            'github_id': comment['id']
+            'github_id': comment['id'],
+            'recource': 'comment'
         }
         asana_comment = AsanaManager(type="comment", **comment_data)
         try:
             comment_obj = Comment.objects.filter(github_id=comment_github_id)
         except:
             Comment.objects.create(**comment_data)
-        
         
     asana_task = AsanaManager(type="task", **task_data)
 

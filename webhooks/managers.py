@@ -17,7 +17,7 @@ class AsanaManager:
 
         else:
             print('here')
-            print(kwargs.get('task'))
+            print(kwargs.get('task').asana_id)
             self.task_obj = kwargs.get('task')
     
 

@@ -43,9 +43,7 @@ class AsanaTaskManager(AsanaManager):
         )
 
     def delete(self):
-        self.client.tasks.delete_task(Task.objects.get(github_id=self.github_id).asana_id)
-
-    
+        self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id)).asana_id)
 
 
 class AsanaCommentManager(AsanaManager):
@@ -67,4 +65,4 @@ class AsanaCommentManager(AsanaManager):
             )
 
     def delete(self):
-        self.client.stories.delete_story(Comment.objects.get(github_id=self.github_id).asana_id)
+        self.client.stories.delete_story(str(Comment.objects.get(github_id=self.github_id).asana_id))

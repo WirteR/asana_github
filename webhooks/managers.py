@@ -9,7 +9,6 @@ class AsanaManager:
         self.author = kwargs.get('author')
         self.body = kwargs.get('body')
         self.github_id = kwargs.get('github_id')
-        self.gid = ''
         
         if self.resource == 'task':
             self.assignee = kwargs.get('assignee')
@@ -24,7 +23,6 @@ class AsanaManager:
 
 class AsanaTaskManager(AsanaManager):
     def create(self):
-        
         response = self.client.tasks.create_task({
             'workspace': '1197770606849983',
             'name': self.title,
@@ -33,14 +31,11 @@ class AsanaTaskManager(AsanaManager):
                 '1197769418678393'
             ]
         })
-        self.gid = response.get('gid')
-        print('create task', self.gid)
-        self.task_obj.update(asana_id=self.gid)
+        self.task_obj.update(asana_id=response.get('gid'))
 
     def update(self):
-        print('update task', self.gid)
         self.client.tasks.update_task(
-            str(self.gid),
+            str(Task.objects.get(github_id=self.github_id).asana_id),
             {
                 'name': self.title,
                 'notes': self.body,
@@ -48,8 +43,9 @@ class AsanaTaskManager(AsanaManager):
         )
 
     def delete(self):
-        print('delete task', self.gid)
-        self.client.tasks.delete_task(self.gid)
+        self.client.tasks.delete_task(Task.objects.get(github_id=self.github_id).asana_id)
+
+    
 
 
 class AsanaCommentManager(AsanaManager):
@@ -59,19 +55,16 @@ class AsanaCommentManager(AsanaManager):
                 "text":self.body
             }
         )
-        self.gid = result['gid']
-        print('create comment', self.gid)
-        Comment.objects.filter(github_id=self.github_id).update(asana_id=self.gid)
+        Comment.objects.filter(github_id=self.github_id).update(asana_id=result['gid'])
 
     def update(self):
-        print('update comment', self.gid)
+        gid = Comment.objects.get(github_id=self.github_id).asana_id
         self.client.stories.update_story(
-                str(self.gid),
+                str(gid),
                 {
                     "text": self.body
                 }
             )
 
     def delete(self):
-        print('delete comment', self.gid)
-        self.client.stories.delete_story(self.gid)
+        self.client.stories.delete_story(Comment.objects.get(github_id=self.github_id).asana_id)

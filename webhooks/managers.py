@@ -35,7 +35,7 @@ class AsanaTaskManager(AsanaManager):
 
     def update(self):
         self.client.tasks.update_task(
-            Task.objects.get(github_id=self.github_id).asana_id,
+            str(Task.objects.get(github_id=self.github_id).asana_id),
             {
                 'name': self.title,
                 'notes': self.body,
@@ -55,7 +55,7 @@ class AsanaCommentManager(AsanaManager):
     def update(self):
         gid = Comment.objects.get(github_id=self.github_id).asana_id
         self.client.stories.update_story(
-                asana_id,
+                gid,
                 {
                     "text": self.body
                 }

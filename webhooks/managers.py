@@ -83,10 +83,12 @@ class AsanaTaskManager(AsanaManager):
         response = self.client.tasks.update_task(
             str(obj.asana_id),
             {
-                'completed': True,
-                'project': '1197769418678393',
-                'section': f'{section_gid}'
-            }
+            'completed': True,
+            'project': '1197769418678393',
+            'memberships': [{
+                'section': '{}'.format(section_gid)
+            }]
+        }
         )
         print(response)
         

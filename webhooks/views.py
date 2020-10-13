@@ -106,9 +106,12 @@ def github_webhook(request):
 
     if body['action'] == 'deleted':
         if not body.get('comment'):
+            asana_task.delete()
             task_obj.delete()
         else:
+            asana_comment.delete()
             comment_obj.delete()
+            
 
     return HttpResponse('pong')
 

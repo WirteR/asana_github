@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 import json
 import asana
+import pdb
+
 
 from .models import *
 from .managers import *
@@ -125,6 +127,7 @@ def github_webhook(request):
 @csrf_exempt
 def asana_webhook(request):
     response = HttpResponse(content_type='application/json',)
-    response['X-Hook-Secret'] = request.POST['headers']['X-Hook-Secret']
+
+    response['X-Hook-Secret'] = request.POST['X-Hook-Secret']
     response.status_code = 200
     return response

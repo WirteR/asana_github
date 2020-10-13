@@ -37,9 +37,6 @@ class AsanaCommentManager(AsanaManager):
     def create(self):
         result = self.client.stories.create_story_for_task(
             str(self.task_obj.asana_id),{
-                "created_by": {
-                    "name": self.author,
-                },
                 "text":self.body
             }
         )

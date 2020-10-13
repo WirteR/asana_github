@@ -129,7 +129,7 @@ class AsanaOutputManager:
         self.code = code
         self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
 
-    def get_unique(data):
+    def get_unique(self.data):
         response = []
         for x in data:
             if len(response) == 0:
@@ -149,7 +149,8 @@ class AsanaOutputManager:
             if x['action'] == 'deleted':
                 deleted.append(x)
 
-        added, changed, deleted = get_unique(added), get_unique(changed), get_unique(deleted)
+        added, changed, deleted = (self.get_unique(added), self.get_unique(changed), 
+                                    self.get_unique(deleted))
         print(len(added), len(changed), len(deleted))    
     
 

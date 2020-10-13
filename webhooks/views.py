@@ -140,6 +140,11 @@ def asana_webhook(request):
     body = json.loads(body_unicode)
     print(body)
 
+    body = body['events']
+    output_manager = AsanaOutputManager(body)
+    output_manager.retrieve_main_data()
+
+
     return HttpResponse(200)
 
     

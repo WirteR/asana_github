@@ -123,3 +123,30 @@ class GitGubManager:
         self.auth = ('WirteR', 'PesVasil10-')
 
     
+
+class AsanaOutputManager:
+    def __init__(self, code):
+        self.code = code
+        self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
+
+    def retrieve_main_data(self):
+        added = []
+        changed = []
+        deleted = []
+        for x in self.code:
+            if x['action'] == 'added':
+                print('added', x)
+                added.append(x)
+            if x['action'] == 'changed':
+                print('changed', x)
+                changed.append(x)
+            if x['action'] == 'deleted':
+                print('deleted', x)
+                deleted.append(x)
+
+        added, changed, deleted = set(added), set(changed), set(deleted)
+        print('\n', added)
+        print('\n', changed)
+        print('\n', deleted)
+    
+

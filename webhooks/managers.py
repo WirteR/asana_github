@@ -83,12 +83,12 @@ class AsanaTaskManager(AsanaManager):
         response = self.client.tasks.update_task(
             str(obj.asana_id),
             {
-            'completed': True,
-            'project': '1197769418678393',
-            'memberships': [{
-                'section': '{}'.format(section_gid)
-            }]
-        }
+                'completed': True,
+                "memberships": [{
+                    'project': '1197769418678393',
+                    "section": '{}'.format(section_gid)
+            }
+]       }
         )
         print(response)
         
@@ -114,3 +114,7 @@ class AsanaCommentManager(AsanaManager):
 
     def delete(self):
         self.client.stories.delete_story(str(Comment.objects.get(github_id=self.github_id).asana_id))
+
+
+class GitGubManager:
+    self.client = 

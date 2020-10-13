@@ -29,7 +29,7 @@ class AsanaTaskManager(AsanaManager):
                 return x['gid']
 
     def get_sections(self, section_name):
-        sections = self.client.sections.get_sections_for_project('1198205950303413')
+        sections = self.client.sections.get_sections_for_project('1197769418678393')
         for x in sections:
             if x['name'] == section_name:
                 return x['gid']
@@ -40,7 +40,7 @@ class AsanaTaskManager(AsanaManager):
             'name': self.title,
             'notes': self.body,
             'projects': [
-                '1198205950303413'
+                '1197769418678393'
             ]
         })
         self.task_obj.update(asana_id=response.get('gid'))
@@ -63,7 +63,7 @@ class AsanaTaskManager(AsanaManager):
             str(Task.objects.get(github_id=self.github_id).asana_id),
             {
                 'assignee': f"{user_gid}",
-                'workspace': '1198205950303413',
+                'workspace': '1197770606849983',
             })
 
     def unassign(self):
@@ -79,7 +79,7 @@ class AsanaTaskManager(AsanaManager):
             str(obj.asana_id),
             {
                 'completed': True,
-                'project': '1198205950303413',
+                'project': '1197769418678393',
                 'section': f'{section_gid}'
             }
         )

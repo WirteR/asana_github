@@ -31,6 +31,7 @@ class AsanaTaskManager(AsanaManager):
                 '1197769418678393'
             ]
         })
+        print(response)
         self.task_obj.update(asana_id=response.get('gid'))
 
     def update(self):
@@ -43,8 +44,16 @@ class AsanaTaskManager(AsanaManager):
         )
 
     def delete(self):
-        self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id)).asana_id)
+        self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id).asana_id))
 
+    def assign(self):
+        print(self.client.users.get_users())
+
+    def unassign(self):
+        pass
+
+    def close(self):
+        pass
 
 class AsanaCommentManager(AsanaManager):
     def create(self):

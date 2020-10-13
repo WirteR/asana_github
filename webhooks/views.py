@@ -65,7 +65,7 @@ def github_webhook(request):
     if not task_obj and body['action'] != 'opened':
         Task.objects.create(**task_data)
         asana_task.create()
-
+    #doneget
     if body['action'] == 'opened':
         Task.objects.create(**task_data)
         asana_task.create()
@@ -82,11 +82,11 @@ def github_webhook(request):
         comment_obj = Comment.objects.filter(github_id=comment_github_id)
         if not comment_obj and body['action'] != 'created':
             Comment.objects.create(**comment_data)
-        
+    #done
     if body['action'] == 'created':
         Comment.objects.create(**comment_data)
         asana_comment.create()
-
+    #done
     if body['action'] == 'edited':
         if not body.get('comment'):
             task_obj.update(**task_data)
@@ -97,6 +97,7 @@ def github_webhook(request):
 
     if body['action'] == 'assigned':
         task_obj.update(assignee=issue['user']['login'])
+        asana_task.assign()
 
     if body['action'] == 'unassigned':
         task_obj.update(assignee='')
@@ -104,6 +105,7 @@ def github_webhook(request):
     if body['action'] == 'closed':
         task_obj.update(status='DN', is_closed=True)
 
+    #done
     if body['action'] == 'deleted':
         if not body.get('comment'):
             asana_task.delete()

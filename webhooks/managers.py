@@ -18,10 +18,10 @@ class AsanaManager():
 
     def create_task(self):
         print(self.title, self.body)
-        self.client.tasks.create_task({
+        res = self.client.tasks.create_task({
             'workspace': '1197770606849983',
             'name': str(self.title),
             'notes': str(self.body)
         })
-
+        print(res)
     

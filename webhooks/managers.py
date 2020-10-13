@@ -47,7 +47,7 @@ class AsanaTaskManager(AsanaManager):
         self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id).asana_id))
 
     def assign(self):
-        print(self.client.users.get_users())
+        print([x for x in self.client.users.get_users()])
 
     def unassign(self):
         self.client.tasks.update_task(

@@ -16,6 +16,8 @@ class AsanaManager:
             self.task_obj = Task.objects.filter(github_id=self.github_id)
 
         else:
+            print('here')
+            print(kwargs.get('task'))
             self.task_obj = kwargs.get('task')
     
 

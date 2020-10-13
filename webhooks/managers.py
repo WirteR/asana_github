@@ -1,5 +1,6 @@
 from .models import Task, Comment
 import asana
+import json
 
 class AsanaManager:
     def __init__(self, *args, **kwargs):
@@ -129,13 +130,14 @@ class AsanaOutputManager:
         self.code = code
         self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
 
-    def get_unique(self.data):
+    def get_unique(self, data):
         response = []
         for x in data:
             if len(response) == 0:
                 response.append(x)
             if response.count(x) == 0:
                 response.append(x)
+        return response
 
     def retrieve_main_data(self):
         added = []

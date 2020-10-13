@@ -142,6 +142,7 @@ class AsanaOutputManager:
                     'type': x['resource']['resource_type'],
                     'action': x['action'],
                     'asana_id': x['resource']['gid'],
+                    'resource_subtype': x['resource']['resource_subtype']
                 }
                 temp = {}
                 if x['resource']['resource_type'] == 'task':

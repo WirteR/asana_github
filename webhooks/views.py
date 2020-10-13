@@ -62,10 +62,7 @@ def github_webhook(request):
     task_obj = Task.objects.filter(github_id=task_github_id)
     if not task_obj:
         Task.objects.create(**task_data)
-        print('here')
     
-    Task.objects.create(**task_data)
-    print('here')
 
     if comment:
         comment_github_id = comment['id']
@@ -76,11 +73,8 @@ def github_webhook(request):
             'github_id': comment['id']
         }
         asana_comment = AsanaCommentManager(type="comment", **comment_data)
-        try:
-            comment_obj = Comment.objects.filter(github_id=comment_github_id)
-            if not comment_obj:
-                Comment.objects.create(**comment_data)
-        except:
+        comment_obj = Comment.objects.filter(github_id=comment_github_id)
+        if not comment_obj:
             Comment.objects.create(**comment_data)
         
     asana_task = AsanaTaskManager(type="task", **task_data)

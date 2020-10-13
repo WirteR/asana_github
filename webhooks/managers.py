@@ -35,7 +35,7 @@ class AsanaTaskManager(AsanaManager):
 
     def update(self):
         self.client.tasks.update_task(
-            self.task_obj.asana_id, 
+            Task.objects.get(github_id=self.github_id).asana_id,
             {
                 'name': self.title,
                 'notes': self.body,

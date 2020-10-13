@@ -80,13 +80,12 @@ def github_webhook(request):
         }
         asana_comment = AsanaCommentManager(type="comment", **comment_data)
         comment_obj = Comment.objects.filter(github_id=comment_github_id)
-        if not comment_obj:
+        if not comment_obj and body['action'] != 'created':
             Comment.objects.create(**comment_data)
         
     if body['action'] == 'created':
         Comment.objects.create(**comment_data)
         asana_comment.create()
-
 
     if body['action'] == 'edited':
         if not body.get('comment'):

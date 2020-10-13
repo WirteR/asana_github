@@ -80,7 +80,6 @@ def github_webhook(request):
     asana_task = AsanaTaskManager(type="task", **task_data)
 
     if body['action'] == 'opened':
-        Task.objects.create(**task_data)
         asana_task.create()
 
     if body['action'] == 'created':

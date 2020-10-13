@@ -126,7 +126,7 @@ def github_webhook(request):
 def asana_webhook(request):
     response = HttpResponse(
         status_code=200, 
-        content_type=application/json,
+        content_type='application/json',
         )
     response['X-Hook-Secret'] = request['headers']['X-Hook-Secret']
     return response

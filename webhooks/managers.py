@@ -118,4 +118,5 @@ class AsanaCommentManager(AsanaManager):
 
 
 class GitGubManager:
-    self.client = Github("WirteR", "PesVasil10-")
+    def __init__(self, *args, **kwargs):
+        self.client = Github("WirteR", "PesVasil10-")

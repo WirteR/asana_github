@@ -9,6 +9,9 @@ class AsanaManager:
         self.author = kwargs.get('author')
         self.body = kwargs.get('body')
         self.github_id = kwargs.get('github_id')
+        self.users = []
+        for i in self.client.users.get_users_for_workspace('1197770606849983'):
+            self.users.append(i)
         
         if self.resource == 'task':
             self.assignee = kwargs.get('assignee')
@@ -31,7 +34,6 @@ class AsanaTaskManager(AsanaManager):
                 '1197769418678393'
             ]
         })
-        print(response)
         self.task_obj.update(asana_id=response.get('gid'))
 
     def update(self):
@@ -47,13 +49,20 @@ class AsanaTaskManager(AsanaManager):
         self.client.tasks.delete_task(str(Task.objects.get(github_id=self.github_id).asana_id))
 
     def assign(self):
-        for i in self.client.users.get_users_for_workspace('1197770606849983'):
-            print(i)
+        for x in self.users:
+            if x['name'] == self.assignee:
+                user_gid = x['gid']
+        self.client.tasks.update_task(
+            str(Task.objects.get(github_id=self.github_id).asana_id),
+            {
+                'assignee': f"{user_gid}",
+                'workspace': '1197770606849983',
+            })
 
     def unassign(self):
         self.client.tasks.update_task(
             str(Task.objects.get(github_id=self.github_id).asana_id),
-            {'assignee': ""})
+            {'assignee': None})
 
     def close(self):
         self.client.tasks.update_task(
@@ -62,6 +71,7 @@ class AsanaTaskManager(AsanaManager):
                 'completed': True,
             }
         )
+
 
 class AsanaCommentManager(AsanaManager):
     def create(self):

@@ -153,6 +153,8 @@ class AsanaOutputManager:
                 if x['resource']['resource_type'] == 'story':
                     obj = self.client.stories.get_story(x['resource']['gid'])
                     temp['body'] = obj.get("text")
+
+                gid_group[x['resource']['gid']] = {**gid_group[x['resource']['gid']], **temp}
             
             if x['parent']['resource_type'] == 'section':
                 gid_group[x['resource']['gid']]['status'] = self.client.sections.get_section(x['parent']['gid'])

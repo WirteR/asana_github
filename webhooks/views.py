@@ -126,14 +126,20 @@ def github_webhook(request):
 
 @csrf_exempt
 def asana_webhook(request):
+    print('here')
     if not request.body:
-        response = HttpResponse(content_type='application/json',)
-        response['X-Hook-Secret'] = request.META["HTTP_X_HOOK_SECRET"]
-        response.status_code = 200
-        return response
+        try:
+            response = HttpResponse(content_type='application/json',)
+            response['X-Hook-Secret'] = request.META["HTTP_X_HOOK_SECRET"]
+            response.status_code = 200
+            return response
+        except:
+            pass
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     print(body)
+
+    return HttpResponse(200)
 
     

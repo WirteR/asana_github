@@ -9,14 +9,14 @@ class AsanaManager:
         self.author = kwargs.get('author')
         self.body = kwargs.get('body')
         self.github_id = kwargs.get('github_id')
-        self.task_obj = Task.objects.filter(github_id=self.github_id)
         
         if self.resource == 'task':
             self.assignee = kwargs.get('assignee')
             self.title = kwargs.get('title')
+            self.task_obj = Task.objects.filter(github_id=self.github_id)
 
         else:
-            self.task_id = kwargs.get('assignee').github_id
+            self.task_obj = kwargs.get('task')
     
 
 class AsanaTaskManager(AsanaManager):

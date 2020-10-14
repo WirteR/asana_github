@@ -22,28 +22,17 @@ class Settings(View):
 
 class DashBoard(View):
     def get(self, request):
-        client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
+        client = asana.Client.access_token('your token)
         client.headers["Asana-Enable"] = "string_ids"
         result = client.webhooks.create({
-            "target":'https://github-asana-sync.herokuapp.com/asana-webhook', 
-            "resource":"1197769418678393"
+            "target":'your_site', 
+            "resource":"your_project_id"
         })
         print(result)
-    
-
-    # def post(self, request):
-    #     secret = request['headers']['X-Hook-Secret']
-    #     print('here here')
-    #     return {"statusCode":"200",
-    #         "headers": {
-    #             'Content-Type': 'application/json',
-    #             'Accept': 'application/json',
-    #             'X-Hook-Secret': secret
-    #         }
-    #     }
 
 
 @csrf_exempt
+@require_POST
 def github_webhook(request):
     if not request.body:
         return HttpResponse(200)
@@ -125,8 +114,8 @@ def github_webhook(request):
 
 
 @csrf_exempt
+@require_POST
 def asana_webhook(request):
-    print('here')
     if not request.body:
         try:
             response = HttpResponse(content_type='application/json',)
@@ -138,12 +127,80 @@ def asana_webhook(request):
 
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    print(body)
 
     body = body['events']
     output_manager = AsanaOutputManager(body)
-    output_manager.retrieve_main_data()
+    validated_data = output_manager.retrieve_main_data()
+    github = GithubManager()
 
+    for k,v in validated_data.items():
+        if k == 'added':
+            for x in v:
+                if x['type'] == "task":
+                    Task.objects.create(
+                        title=x['title'],
+                        body=x['body'],
+                        assignee=x['assignee'],
+                        author=x['author'],
+                        status=x['status'],
+                        asana_id=x['asana_id']
+                    )
+                    github.create(data={
+                        'title': x['title'],
+                        'body': x['body'],
+                        'assignee': x['assignee'],
+                        'asana_id': x['asana_id']
+                    })
+
+                if x['type'] == "story":
+                    if x['recource_subtype'] != 'added_to_project':
+                        Comment.objects.create(
+                            task=Task.objects.filter(asana_id=x['parent']),
+                            body=x['body'],
+                            asana_id=x['asana_id'],
+                            author=x['author']
+                        )
+                        github.comment(data={
+                            'body': x['body'],
+                            'asana_id': x['asana_id']
+                        })
+
+
+        if k == 'changed':
+            for x in v:
+                if x['type'] == "task":
+                    Task.objects.filter(asana_id=x['asana_id']).update(
+                        title=x['title'],
+                        body=x['body'],
+                        assignee=x['assignee'],
+                        status=x['status'],
+                        is_closed=x['is_closed']
+                    )
+                    github.update(data={
+                        'title': x['title'],
+                        'body': x['body'],
+                        'assignee': x['assignee'],
+                        'state': x['status'],
+                        'asana_id': x['asana_id']
+                    })
+
+                if x['type'] == "story":
+                    Comment.objects.filter(asana_id=x['asana_id']).update(
+                        body=x['body']
+                    )
+                    github.update_comment(data={
+                            'body': x['body'],
+                            'asana_id': x['asana_id']
+                        })
+
+        if k == "deleted":
+            for x in v:
+                if x['type'] == "task":
+                    Task.objects.filter(asana_api=x['asana_id']).delete()
+                if x['type'] == "story":
+                    obj = Comment.objects.filter(asana_api=x['asana_id'])
+                    github.delete_comment(obj.github_id)
+                    obj.delete()
 
     return HttpResponse(200)
 

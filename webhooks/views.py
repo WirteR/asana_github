@@ -22,17 +22,28 @@ class Settings(View):
 
 class DashBoard(View):
     def get(self, request):
-        client = asana.Client.access_token('your token)
+        client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
         client.headers["Asana-Enable"] = "string_ids"
         result = client.webhooks.create({
-            "target":'your_site', 
-            "resource":"your_project_id"
+            "target":'https://github-asana-sync.herokuapp.com/asana-webhook', 
+            "resource":"1197769418678393"
         })
         print(result)
+    
+
+    # def post(self, request):
+    #     secret = request['headers']['X-Hook-Secret']
+    #     print('here here')
+    #     return {"statusCode":"200",
+    #         "headers": {
+    #             'Content-Type': 'application/json',
+    #             'Accept': 'application/json',
+    #             'X-Hook-Secret': secret
+    #         }
+    #     }
 
 
 @csrf_exempt
-@require_POST
 def github_webhook(request):
     if not request.body:
         return HttpResponse(200)
@@ -114,7 +125,6 @@ def github_webhook(request):
 
 
 @csrf_exempt
-@require_POST
 def asana_webhook(request):
     if not request.body:
         try:
@@ -200,7 +210,7 @@ def asana_webhook(request):
                 if x['type'] == "story":
                     obj = Comment.objects.filter(asana_api=x['asana_id'])
                     github.delete_comment(obj.github_id)
-                    obj.delete()
+                    obj.delete
 
     return HttpResponse(200)
 

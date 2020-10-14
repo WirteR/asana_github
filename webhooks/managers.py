@@ -8,7 +8,7 @@ import requests
 class AsanaManager:
     def __init__(self, *args, **kwargs):
     
-        self.client = asana.Client.access_token('your token')
+        self.client = asana.Client.access_token('')
         self.resource = kwargs.get('type')
         self.author = kwargs.get('author')
         self.body = kwargs.get('body')
@@ -27,13 +27,13 @@ class AsanaManager:
 
 class AsanaTaskManager(AsanaManager):
     def get_user_gid(self):
-        users = self.client.users.get_users_for_workspace('your_workspace')
+        users = self.client.users.get_users_for_workspace('1197770606849983')
         for x in users:
             if x['name'] == self.assignee:
                 return x['gid']
 
     def get_sections(self, section_name):
-        sections = self.client.sections.get_sections_for_project('your_project')
+        sections = self.client.sections.get_sections_for_project('1197769418678393')
         if section_name == 'TD':
             section_name = 'To do'
         elif section_name == 'DO':
@@ -46,7 +46,7 @@ class AsanaTaskManager(AsanaManager):
 
     def create(self):
         response = self.client.tasks.create_task({
-            'workspace': 'your_workspace',
+            'workspace': '1197770606849983',
             'name': self.title,
             'notes': self.body,
             'projects': [
@@ -73,7 +73,7 @@ class AsanaTaskManager(AsanaManager):
             str(Task.objects.get(github_id=self.github_id).asana_id),
             {
                 'assignee': f"{user_gid}",
-                'workspace': 'your_workspace',
+                'workspace': '1197770606849983',
             })
 
     def unassign(self):
@@ -89,10 +89,10 @@ class AsanaTaskManager(AsanaManager):
             {
                     'completed': True,
                     'projects': [
-                        'your_project'
+                        '1197769418678393'
                     ],
                     "memberships":[{
-                        "project": "your_project",
+                        "project": "1197769418678393",
                         "section": '{}'.format(section_gid)
                     }]}
             )
@@ -124,15 +124,14 @@ class AsanaCommentManager(AsanaManager):
 
 class GithubManager:
     def __init__(self):
-        self.username = "username"
-        self.password = "password-"
-        self.created_issue_id = ''
-        self.created_issue_url = ''
-        self.created_comment_url = ''
+        self.username = "WirteR"
+        self.password = "PesVasil10-"
+        self.issue_url = ''
+        self.comment_url = ''
 
     def create(self, data):
-        respose = requests.post(
-            'https://api.github.com/WirteR/asana_github/issues',
+        response = requests.post(
+            'https://api.github.com/repos/WirteR/asana_github/issues',
             auth=(self.username, self.password),
             headers={ "Content-Type": "application/json" },
             data = json.dumps({
@@ -141,58 +140,63 @@ class GithubManager:
                 'assignee': data['assignee']
             }),
         )
-        body_unicode = response.decode('utf-8')
-        body = json.loads(body_unicode)
-        self.created_issue_id = body.get('id')
-        self.created_issue_url = body.get('url')
+        body = response.json()
+        self.issue_url = body.get('url')
+        self.comment_url = body.get('comments_url')
         Task.objects.filter(asana_id=data.get('asana_id')).update(github_id=body.get('id'))
+        return response
 
     def update(self, data):
+        print(self.issue_url)
         response = requests.patch(
-            self.created_issue_url,
+            self.issue_url,
             params = json.dumps({
-                'title': data['title'] if data.get('title'),
-                'body':  data['body'] if data.get('body'),
+                'title': data['title'],
+                'body':  data['body'],
                 'state': 'closed' if data.is_closed else 'open',
-                'assignee': data['assignee'] if data.get('assignee')
+                'assignee': data['assignee']
             }),
             auth=(self.username, self.password),
             headers={ "Content-Type": "application/json" },
         )
+        return response.json()
     
     def comment(self, data):
         response = requests.post(
-            self.created_issue_url + '/comments',
+            self.comment_url,
             data = json.dumps({"body": data.get('body')}),
             auth=(self.username, self.password),
             headers={ "Content-Type": "application/json" },
         )
-        body_unicode = response.decode('utf-8')
-        body = json.loads(body_unicode)
+        print(response)
+        body = response.json()
         Comment.objects.filter(asana_id=data.get('asana_id')).update(github_id=body.get('id'))
+        return response.json()
 
     def update_comment(self, data, comment_id):
         response = requests.patch(
-            self.created_issue_url + f'/comments/{comment_id}',
+            self.comment_url + f'/{comment_id}',
             params = json.dumps({
                 'body': data.get('body')
             }),
             auth=(self.username, self.password),
             headers={ "Content-Type": "application/json" },
         )
+        return response.json()
 
     def delete_comment(self, comment_id):
         response = requests.delete(
-            self.created_issue_url + f'/comments/{comment_id}',
+            self.comments_url + f'/{comment_id}',
             auth=(self.username, self.password),
             headers={ "Content-Type": "application/json" },
         )
+        return response.json()
     
 
 class AsanaOutputManager:
     def __init__(self, code):
         self.code = code
-        self.client = asana.Client.access_token('your token')
+        self.client = asana.Client.access_token('1/1197770606849972:6ec58af88e7446f312e7b1c9e435baff')
 
     def transform_added_data(self, data):
         response = []
@@ -229,7 +233,7 @@ class AsanaOutputManager:
         response = []
         for x in data:
             temp = {
-                'user': self.client.users.get_user(x['user']['gid'])
+                'user': self.client.users.get_user(x['user']['gid']),
                 'action': x['action'],
                 'type': x['resource']['recource_type'],
                 'asana_id': x['resource']['gid']
@@ -254,9 +258,9 @@ class AsanaOutputManager:
         response = []
         for x in data:
             temp = {
-                'user': self.client.users.get_user(x['user']['gid'])
+                'user': self.client.users.get_user(x['user']['gid']),
                 'action': x['action'],
-                'type': x['resource']['recource_type']
+                'type': x['resource']['recource_type'],
                 'asana_id': x['resource']['gid']
             }
             response.append(temp)
